@@ -17,11 +17,27 @@
 
         <div class="controls">
             <button id="addCityBtn" class="add-city-btn">+ Add City</button>
+            <button id="toggleMeetingFinder" class="meeting-finder-btn">🤝 Find Meeting Time</button>
+        </div>
+
+        <div id="timeSliderContainer" class="time-slider-container">
+            <label for="timeSlider" class="slider-label">
+                <span>View Time:</span>
+                <span id="sliderTimeDisplay" class="slider-time">Current Time</span>
+            </label>
+            <input type="range" id="timeSlider" class="time-slider" min="0" max="23" value="-1" step="1">
+            <button id="resetTimeSlider" class="reset-slider-btn">Reset to Now</button>
+        </div>
+
+        <div id="meetingFinderPanel" class="meeting-finder-panel hidden">
+            <h3>🤝 Best Meeting Times</h3>
+            <div id="meetingTimesDisplay" class="meeting-times-display"></div>
         </div>
 
         <div id="citySelector" class="city-selector-panel hidden">
             <h3>Select a City</h3>
-            <select id="cityDropdown" class="city-dropdown">
+            <input type="text" id="citySearch" class="city-search" placeholder="Search cities...">
+            <select id="cityDropdown" class="city-dropdown" size="8">
                 <option value="">Choose a city...</option>
                 <option value="Singapore">Singapore (UTC+8)</option>
                 <option value="Los_Angeles">Los Angeles (UTC-7)</option>
