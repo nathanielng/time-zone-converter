@@ -545,8 +545,8 @@ function updateTime() {
             if (meetingFinderActive && meetingHours.has(i)) {
                 hourBlock.classList.add('meeting-time');
             }
-            // Check if it's sleep hours (12am-8am)
-            else if (cityHour >= 0 && cityHour < 8) {
+            // Check if it's sleep hours (12am-7am)
+            else if (cityHour >= 0 && cityHour < 7) {
                 hourBlock.classList.add('sleep-hours');
             }
             // Check if it's work hours
