@@ -3,6 +3,10 @@ const themeToggle = document.getElementById('themeToggle');
 const themeIcon = document.querySelector('.theme-icon');
 const htmlElement = document.documentElement;
 
+// Layout management
+const layoutToggle = document.getElementById('layoutToggle');
+const layoutIcon = document.querySelector('.layout-icon');
+
 // City management
 const addCityBtn = document.getElementById('addCityBtn');
 const citySelector = document.getElementById('citySelector');
@@ -85,6 +89,26 @@ function toggleTheme() {
     htmlElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
     updateThemeIcon(newTheme);
+}
+
+// Initialize layout
+function initLayout() {
+    const savedLayout = localStorage.getItem('layout') || 'horizontal';
+    htmlElement.setAttribute('data-layout', savedLayout);
+    updateLayoutIcon(savedLayout);
+}
+
+function updateLayoutIcon(layout) {
+    layoutIcon.textContent = layout === 'vertical' ? '⇅' : '⇄';
+}
+
+function toggleLayout() {
+    const currentLayout = htmlElement.getAttribute('data-layout');
+    const newLayout = currentLayout === 'vertical' ? 'horizontal' : 'vertical';
+    htmlElement.setAttribute('data-layout', newLayout);
+    localStorage.setItem('layout', newLayout);
+    updateLayoutIcon(newLayout);
+    updateTime(); // Refresh the display with new layout
 }
 
 // Initialize time selector
@@ -560,6 +584,7 @@ function updateTime() {
 
     // Auto-scroll to the selected time (including current time)
     setTimeout(() => {
+        const currentLayout = htmlElement.getAttribute('data-layout');
         const hourBlocks = hoursScrollContainer.querySelectorAll('.hour-block');
         if (hourBlocks.length > 0) {
             let targetHour;
@@ -573,11 +598,22 @@ function updateTime() {
 
             if (targetHour < hourBlocks.length) {
                 const targetBlock = hourBlocks[targetHour];
-                const scrollLeft = targetBlock.offsetLeft - (hoursScrollContainer.clientWidth / 2) + (targetBlock.offsetWidth / 2);
-                hoursScrollContainer.scrollTo({
-                    left: Math.max(0, scrollLeft),
-                    behavior: 'smooth'
-                });
+
+                if (currentLayout === 'vertical') {
+                    // Vertical scroll
+                    const scrollTop = targetBlock.offsetTop - (hoursScrollContainer.clientHeight / 2) + (targetBlock.offsetHeight / 2);
+                    hoursScrollContainer.scrollTo({
+                        top: Math.max(0, scrollTop),
+                        behavior: 'smooth'
+                    });
+                } else {
+                    // Horizontal scroll
+                    const scrollLeft = targetBlock.offsetLeft - (hoursScrollContainer.clientWidth / 2) + (targetBlock.offsetWidth / 2);
+                    hoursScrollContainer.scrollTo({
+                        left: Math.max(0, scrollLeft),
+                        behavior: 'smooth'
+                    });
+                }
             }
         }
     }, 50);
@@ -585,6 +621,7 @@ function updateTime() {
 
 // Event listeners
 themeToggle.addEventListener('click', toggleTheme);
+layoutToggle.addEventListener('click', toggleLayout);
 addCityBtn.addEventListener('click', showCitySelector);
 cancelSelector.addEventListener('click', hideCitySelector);
 toggleMeetingFinder.addEventListener('click', toggleMeetingFinderPanel);
@@ -628,6 +665,7 @@ timeSelector.addEventListener('change', updateTime);
 
 // Initialize app
 initTheme();
+initLayout();
 initTimeSelector();
 initCities();
 updateHeaderTime();

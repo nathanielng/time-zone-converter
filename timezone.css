@@ -102,7 +102,12 @@ h1 {
     font-weight: 500;
 }
 
-.theme-toggle {
+.header-toggles {
+    display: flex;
+    gap: 10px;
+}
+
+.theme-toggle, .layout-toggle {
     background: none;
     border: 2px solid var(--border-color);
     border-radius: 50%;
@@ -116,12 +121,12 @@ h1 {
     transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
-.theme-toggle:hover {
+.theme-toggle:hover, .layout-toggle:hover {
     transform: scale(1.1);
     border-color: var(--btn-primary-bg);
 }
 
-.theme-toggle:active {
+.theme-toggle:active, .layout-toggle:active {
     transform: scale(0.95);
 }
 
@@ -469,6 +474,60 @@ h1 {
     color: var(--text-secondary);
 }
 
+/* Vertical Layout Styles */
+[data-layout="vertical"] .timeline-container {
+    flex-direction: column;
+}
+
+[data-layout="vertical"] .city-info-column {
+    width: 100%;
+    border-right: none;
+    border-bottom: 2px solid var(--border-color);
+    display: flex;
+    flex-direction: row;
+}
+
+[data-layout="vertical"] .city-info-row {
+    flex: 1;
+    border-bottom: none;
+    border-right: 1px solid var(--border-color);
+    min-height: auto;
+    padding: 12px 10px;
+}
+
+[data-layout="vertical"] .city-info-row:last-child {
+    border-right: none;
+}
+
+[data-layout="vertical"] .hours-scroll-container {
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 500px;
+}
+
+[data-layout="vertical"] .hours-grid {
+    flex-direction: row;
+}
+
+[data-layout="vertical"] .hours-row {
+    flex-direction: column;
+    flex: 1;
+    border-bottom: none;
+    border-right: 1px solid var(--border-color);
+    padding: 12px 10px;
+    min-height: auto;
+    gap: 2px;
+}
+
+[data-layout="vertical"] .hours-row:last-child {
+    border-right: none;
+}
+
+[data-layout="vertical"] .hours-scroll-container::-webkit-scrollbar {
+    width: 8px;
+    height: auto;
+}
+
 @media (max-width: 768px) {
     .container {
         padding: 15px;
@@ -486,7 +545,11 @@ h1 {
         font-size: 20px;
     }
 
-    .theme-toggle {
+    .header-toggles {
+        gap: 8px;
+    }
+
+    .theme-toggle, .layout-toggle {
         width: 45px;
         height: 45px;
         font-size: 20px;
@@ -565,7 +628,11 @@ h1 {
         font-size: 18px;
     }
 
-    .theme-toggle {
+    .header-toggles {
+        gap: 6px;
+    }
+
+    .theme-toggle, .layout-toggle {
         width: 40px;
         height: 40px;
         font-size: 18px;
