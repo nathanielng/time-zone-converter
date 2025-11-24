@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Zone Converter</title>
+    <link rel="stylesheet" href="timezone.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Time Zone Converter</h1>
+        <div class="city-selectors">
+            <select id="city1" class="city-select">
+                <option value="Singapore" selected>Singapore (UTC+8)</option>
+            </select>
+            <select id="city2" class="city-select">
+                <option value="Los_Angeles" selected>Los Angeles (UTC-7)</option>
+                <option value="New_York">New York (UTC-4)</option>
+                <option value="London">London (UTC+1)</option>
+                <option value="Paris">Paris (UTC+2)</option>
+                <option value="Frankfurt">Frankfurt (UTC+2)</option>
+                <option value="Kolkata">Kolkata (UTC+5:30)</option>
+                <option value="Jakarta">Jakarta (UTC+7)</option>
+                <option value="Tokyo">Tokyo (UTC+9)</option>
+                <option value="Sydney">Sydney (UTC+10)</option>
+            </select>
+            <select id="city3" class="city-select">
+                <option value="">Select a city</option>
+                <option value="New_York">New York (UTC-4)</option>
+                <option value="London">London (UTC+1)</option>
+                <option value="Paris">Paris (UTC+2)</option>
+                <option value="Frankfurt">Frankfurt (UTC+2)</option>
+                <option value="Kolkata">Kolkata (UTC+5:30)</option>
+                <option value="Jakarta">Jakarta (UTC+7)</option>
+                <option value="Tokyo">Tokyo (UTC+9)</option>
+                <option value="Sydney">Sydney (UTC+10)</option>
+            </select>
+        </div>
+        <div id="timeDisplay" class="time-display"></div>
+        <div id="dstIndicator" class="dst-indicator"></div>
+    </div>
+    <script src="timezone.js"></script>
+</body>
+</html>
