@@ -16,6 +16,7 @@ const dstIndicator = document.getElementById('dstIndicator');
 
 // Time selector
 const timeSelector = document.getElementById('timeSelector');
+const headerTime = document.getElementById('headerTime');
 
 // Meeting finder
 const toggleMeetingFinder = document.getElementById('toggleMeetingFinder');
@@ -284,6 +285,18 @@ function formatHour12(hour) {
     return `${hour12}:00 ${ampm}`;
 }
 
+function updateHeaderTime() {
+    const now = new Date();
+    const formatter = new Intl.DateTimeFormat('en-US', {
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        hour12: true,
+        timeZoneName: 'short'
+    });
+    headerTime.textContent = formatter.format(now);
+}
+
 function updateTime() {
     timeDisplay.innerHTML = '';
     dstIndicator.innerHTML = '';
@@ -374,7 +387,10 @@ function updateTime() {
 
         const currentTime = document.createElement('div');
         currentTime.className = 'current-time';
-        currentTime.textContent = selectorValue === -1 ? `${formattedTime}` : `At ${formatHour12(selectorValue)}: ${formattedTime}`;
+        // Extract timezone abbreviation from formatted time (e.g., "PST" from "10:30 PM PST")
+        const timezonePart = formattedTime.split(' ').pop();
+        const timePart = formattedTime.replace(` ${timezonePart}`, '');
+        currentTime.textContent = `${timePart} ${timezonePart}`;
 
         cityInfoRow.appendChild(cityName);
         cityInfoRow.appendChild(currentTime);
@@ -453,6 +469,22 @@ function updateTime() {
     timelineContainer.appendChild(cityInfoColumn);
     timelineContainer.appendChild(hoursScrollContainer);
     timeDisplay.appendChild(timelineContainer);
+
+    // Auto-scroll to the selected time if not current time
+    if (selectorValue !== -1) {
+        // Wait for DOM to update
+        setTimeout(() => {
+            const hourBlocks = hoursScrollContainer.querySelectorAll('.hour-block');
+            if (hourBlocks.length > 0 && selectorValue < hourBlocks.length) {
+                const targetBlock = hourBlocks[selectorValue];
+                const scrollLeft = targetBlock.offsetLeft - (hoursScrollContainer.clientWidth / 2) + (targetBlock.offsetWidth / 2);
+                hoursScrollContainer.scrollTo({
+                    left: Math.max(0, scrollLeft),
+                    behavior: 'smooth'
+                });
+            }
+        }, 50);
+    }
 }
 
 // Event listeners
@@ -502,9 +534,11 @@ timeSelector.addEventListener('change', updateTime);
 initTheme();
 initTimeSelector();
 initCities();
+updateHeaderTime();
 
 // Update time every minute (only if showing current time)
 setInterval(() => {
+    updateHeaderTime();
     if (parseInt(timeSelector.value) === -1) {
         updateTime();
     }

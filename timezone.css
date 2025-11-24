@@ -84,10 +84,22 @@ body {
     gap: 20px;
 }
 
+.header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
 h1 {
     margin: 0;
     color: var(--text-primary);
     font-size: 28px;
+}
+
+.header-time {
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .theme-toggle {
