@@ -18,15 +18,9 @@
         <div class="controls">
             <button id="addCityBtn" class="add-city-btn">+ Add City</button>
             <button id="toggleMeetingFinder" class="meeting-finder-btn">🤝 Find Meeting Time</button>
-        </div>
-
-        <div id="timeSliderContainer" class="time-slider-container">
-            <label for="timeSlider" class="slider-label">
-                <span>View Time:</span>
-                <span id="sliderTimeDisplay" class="slider-time">Current Time</span>
-            </label>
-            <input type="range" id="timeSlider" class="time-slider" min="0" max="23" value="-1" step="1">
-            <button id="resetTimeSlider" class="reset-slider-btn">Reset to Now</button>
+            <select id="timeSelector" class="time-selector">
+                <option value="-1">Current Time</option>
+            </select>
         </div>
 
         <div id="meetingFinderPanel" class="meeting-finder-panel hidden">

@@ -14,10 +14,8 @@ const selectedCitiesContainer = document.getElementById('selectedCities');
 const timeDisplay = document.getElementById('timeDisplay');
 const dstIndicator = document.getElementById('dstIndicator');
 
-// Time slider
-const timeSlider = document.getElementById('timeSlider');
-const sliderTimeDisplay = document.getElementById('sliderTimeDisplay');
-const resetTimeSlider = document.getElementById('resetTimeSlider');
+// Time selector
+const timeSelector = document.getElementById('timeSelector');
 
 // Meeting finder
 const toggleMeetingFinder = document.getElementById('toggleMeetingFinder');
@@ -86,6 +84,21 @@ function toggleTheme() {
     htmlElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
     updateThemeIcon(newTheme);
+}
+
+// Initialize time selector
+function initTimeSelector() {
+    // Populate with all 24 hours
+    for (let i = 0; i < 24; i++) {
+        const option = document.createElement('option');
+        option.value = i;
+        const hour12 = i === 0 ? 12 : (i > 12 ? i - 12 : i);
+        const ampm = i < 12 ? 'AM' : 'PM';
+        option.textContent = `${hour12}:00 ${ampm}`;
+        timeSelector.appendChild(option);
+    }
+    // Default to current time
+    timeSelector.value = '-1';
 }
 
 // Initialize cities
@@ -179,24 +192,6 @@ function filterCities(searchTerm) {
         option.textContent = city.replace(/_/g, ' ');
         cityDropdown.appendChild(option);
     });
-}
-
-// Time slider functionality
-function updateSliderDisplay() {
-    const sliderValue = parseInt(timeSlider.value);
-    if (sliderValue === -1) {
-        sliderTimeDisplay.textContent = 'Current Time';
-    } else {
-        const hour12 = sliderValue === 0 ? 12 : (sliderValue > 12 ? sliderValue - 12 : sliderValue);
-        const ampm = sliderValue < 12 ? 'AM' : 'PM';
-        sliderTimeDisplay.textContent = `${hour12}:00 ${ampm}`;
-    }
-    updateTime();
-}
-
-function resetTimeToNow() {
-    timeSlider.value = -1;
-    updateSliderDisplay();
 }
 
 // Meeting finder functionality
@@ -298,14 +293,14 @@ function updateTime() {
         return;
     }
 
-    const sliderValue = parseInt(timeSlider.value);
+    const selectorValue = parseInt(timeSelector.value);
     const now = new Date();
 
-    // If slider is active, set the time based on slider value
+    // If time selector is not set to current time, set the time based on selector value
     let referenceTime = now;
-    if (sliderValue !== -1) {
+    if (selectorValue !== -1) {
         referenceTime = new Date(now);
-        referenceTime.setHours(sliderValue, 0, 0, 0);
+        referenceTime.setHours(selectorValue, 0, 0, 0);
     }
 
     // Find meeting hours if active
@@ -379,7 +374,7 @@ function updateTime() {
 
         const currentTime = document.createElement('div');
         currentTime.className = 'current-time';
-        currentTime.textContent = sliderValue === -1 ? `${formattedTime}` : `At ${formatHour12(sliderValue)}: ${formattedTime}`;
+        currentTime.textContent = selectorValue === -1 ? `${formattedTime}` : `At ${formatHour12(selectorValue)}: ${formattedTime}`;
 
         cityInfoRow.appendChild(cityName);
         cityInfoRow.appendChild(currentTime);
@@ -421,8 +416,8 @@ function updateTime() {
                 hourBlock.classList.add('work-hours');
             }
 
-            // Check if it's the current hour (or slider hour)
-            const checkHour = sliderValue === -1 ?
+            // Check if it's the current hour (or selected hour)
+            const checkHour = selectorValue === -1 ?
                 parseInt(new Intl.DateTimeFormat('en-US', hourOptions).format(now)) :
                 parseInt(new Intl.DateTimeFormat('en-US', hourOptions).format(referenceTime));
 
@@ -500,17 +495,17 @@ citySearch.addEventListener('keypress', (e) => {
     }
 });
 
-// Time slider
-timeSlider.addEventListener('input', updateSliderDisplay);
-resetTimeSlider.addEventListener('click', resetTimeToNow);
+// Time selector
+timeSelector.addEventListener('change', updateTime);
 
 // Initialize app
 initTheme();
+initTimeSelector();
 initCities();
 
-// Update time every minute
+// Update time every minute (only if showing current time)
 setInterval(() => {
-    if (parseInt(timeSlider.value) === -1) {
+    if (parseInt(timeSelector.value) === -1) {
         updateTime();
     }
 }, 60000);
