@@ -216,15 +216,19 @@ function findMeetingTimes() {
         return;
     }
 
-    const meetingHours = [];
     const now = new Date();
+    const tier1Hours = []; // 9 AM - 6 PM
+    const tier2Hours = []; // 8 AM - 7 PM
+    const tier3Hours = []; // Avoids 12 AM - 7 AM
 
-    // Find hours where all cities are in work hours (9 AM - 6 PM)
+    // Check all 24 hours and categorize them
     for (let localHour = 0; localHour < 24; localHour++) {
         const testDate = new Date(now);
         testDate.setHours(localHour, 0, 0, 0);
 
-        let allInWorkHours = true;
+        let tier1Valid = true;
+        let tier2Valid = true;
+        let tier3Valid = true;
         const cityTimes = [];
 
         selectedCities.forEach(city => {
@@ -239,8 +243,19 @@ function findMeetingTimes() {
 
             const cityHour = parseInt(new Intl.DateTimeFormat('en-US', hourOptions).format(testDate));
 
+            // Check tier 1: 9 AM - 6 PM
             if (cityHour < 9 || cityHour >= 18) {
-                allInWorkHours = false;
+                tier1Valid = false;
+            }
+
+            // Check tier 2: 8 AM - 7 PM
+            if (cityHour < 8 || cityHour >= 19) {
+                tier2Valid = false;
+            }
+
+            // Check tier 3: Avoid 12 AM - 7 AM
+            if (cityHour >= 0 && cityHour < 7) {
+                tier3Valid = false;
             }
 
             const hour12 = cityHour === 0 ? 12 : (cityHour > 12 ? cityHour - 12 : cityHour);
@@ -251,32 +266,49 @@ function findMeetingTimes() {
             });
         });
 
-        if (allInWorkHours) {
-            meetingHours.push({
-                localHour,
-                cityTimes
-            });
+        const timeSlot = { localHour, cityTimes };
+
+        if (tier1Valid) {
+            tier1Hours.push(timeSlot);
+        } else if (tier2Valid) {
+            tier2Hours.push(timeSlot);
+        } else if (tier3Valid) {
+            tier3Hours.push(timeSlot);
         }
     }
 
-    if (meetingHours.length === 0) {
-        meetingTimesDisplay.innerHTML = '<p style="color: #d32f2f;">No overlapping work hours found across all cities.</p>';
+    // Display results based on best available tier
+    let meetingHours = [];
+    let tierMessage = '';
+
+    if (tier1Hours.length > 0) {
+        meetingHours = tier1Hours;
+        tierMessage = `<p style="margin-top: 0; color: var(--text-primary);"><strong>✅ Found ${meetingHours.length} ideal time slot(s) (all cities 9 AM - 6 PM):</strong></p>`;
+    } else if (tier2Hours.length > 0) {
+        meetingHours = tier2Hours;
+        tierMessage = `<p style="margin-top: 0; color: #FF9800;"><strong>⚠️ Found ${meetingHours.length} acceptable time slot(s) (all cities 8 AM - 7 PM):</strong></p>`;
+    } else if (tier3Hours.length > 0) {
+        meetingHours = tier3Hours;
+        tierMessage = `<p style="margin-top: 0; color: #FF5722;"><strong>⏰ Found ${meetingHours.length} possible time slot(s) (avoids midnight-7 AM):</strong></p>`;
     } else {
-        meetingTimesDisplay.innerHTML = `<p style="margin-top: 0; color: var(--text-primary);"><strong>Found ${meetingHours.length} time slot(s) where all cities are in work hours:</strong></p>`;
-
-        meetingHours.forEach(slot => {
-            const slotDiv = document.createElement('div');
-            slotDiv.className = 'meeting-time-slot';
-
-            let html = `<strong>Your time: ${formatHour12(slot.localHour)}</strong><br>`;
-            slot.cityTimes.forEach(ct => {
-                html += `${ct.city}: ${ct.time} &nbsp;`;
-            });
-
-            slotDiv.innerHTML = html;
-            meetingTimesDisplay.appendChild(slotDiv);
-        });
+        meetingTimesDisplay.innerHTML = '<p style="color: #d32f2f;"><strong>❌ No suitable meeting times found.</strong> All possible times would require someone to meet between midnight and 7 AM.</p>';
+        return;
     }
+
+    meetingTimesDisplay.innerHTML = tierMessage;
+
+    meetingHours.forEach(slot => {
+        const slotDiv = document.createElement('div');
+        slotDiv.className = 'meeting-time-slot';
+
+        let html = `<strong>Your time: ${formatHour12(slot.localHour)}</strong><br>`;
+        slot.cityTimes.forEach(ct => {
+            html += `${ct.city}: ${ct.time} &nbsp;`;
+        });
+
+        slotDiv.innerHTML = html;
+        meetingTimesDisplay.appendChild(slotDiv);
+    });
 }
 
 function formatHour12(hour) {
@@ -352,14 +384,21 @@ function updateTime() {
         referenceTime.setHours(selectorValue, 0, 0, 0);
     }
 
-    // Find meeting hours if active
+    // Find meeting hours if active (using same three-tier logic)
     let meetingHours = new Set();
     if (meetingFinderActive && selectedCities.length >= 2) {
+        const tier1Hours = new Set();
+        const tier2Hours = new Set();
+        const tier3Hours = new Set();
+
         for (let localHour = 0; localHour < 24; localHour++) {
             const testDate = new Date(now);
             testDate.setHours(localHour, 0, 0, 0);
 
-            let allInWorkHours = true;
+            let tier1Valid = true;
+            let tier2Valid = true;
+            let tier3Valid = true;
+
             selectedCities.forEach(city => {
                 const cityData = cities[city];
                 const timeZone = cityData.tz;
@@ -372,14 +411,38 @@ function updateTime() {
 
                 const cityHour = parseInt(new Intl.DateTimeFormat('en-US', hourOptions).format(testDate));
 
+                // Check tier 1: 9 AM - 6 PM
                 if (cityHour < 9 || cityHour >= 18) {
-                    allInWorkHours = false;
+                    tier1Valid = false;
+                }
+
+                // Check tier 2: 8 AM - 7 PM
+                if (cityHour < 8 || cityHour >= 19) {
+                    tier2Valid = false;
+                }
+
+                // Check tier 3: Avoid 12 AM - 7 AM
+                if (cityHour >= 0 && cityHour < 7) {
+                    tier3Valid = false;
                 }
             });
 
-            if (allInWorkHours) {
-                meetingHours.add(localHour);
+            if (tier1Valid) {
+                tier1Hours.add(localHour);
+            } else if (tier2Valid) {
+                tier2Hours.add(localHour);
+            } else if (tier3Valid) {
+                tier3Hours.add(localHour);
             }
+        }
+
+        // Use the best available tier
+        if (tier1Hours.size > 0) {
+            meetingHours = tier1Hours;
+        } else if (tier2Hours.size > 0) {
+            meetingHours = tier2Hours;
+        } else {
+            meetingHours = tier3Hours;
         }
     }
 
