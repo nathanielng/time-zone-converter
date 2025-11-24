@@ -488,11 +488,12 @@ h1 {
 }
 
 [data-layout="vertical"] .city-info-row {
-    flex: 1;
+    width: 90px;
+    flex-shrink: 0;
     border-bottom: none;
     border-right: 1px solid var(--border-color);
     min-height: auto;
-    padding: 12px 10px;
+    padding: 12px 8px;
 }
 
 [data-layout="vertical"] .city-info-row:last-child {
@@ -511,16 +512,21 @@ h1 {
 
 [data-layout="vertical"] .hours-row {
     flex-direction: column;
-    flex: 1;
+    width: 90px;
+    flex-shrink: 0;
     border-bottom: none;
     border-right: 1px solid var(--border-color);
-    padding: 12px 10px;
+    padding: 12px 8px;
     min-height: auto;
     gap: 2px;
 }
 
 [data-layout="vertical"] .hours-row:last-child {
     border-right: none;
+}
+
+[data-layout="vertical"] .hour-block {
+    width: 60px;
 }
 
 [data-layout="vertical"] .hours-scroll-container::-webkit-scrollbar {
