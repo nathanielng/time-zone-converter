@@ -65,15 +65,22 @@ body {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px var(--shadow);
-    max-width: 1000px;
+    max-width: 1200px;
     width: 100%;
 }
 
 .header {
+    position: sticky;
+    top: 0;
+    background-color: var(--bg-card);
+    z-index: 100;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    margin: -20px -20px 20px -20px;
+    padding: 20px;
+    border-bottom: 2px solid var(--border-color);
+    border-radius: 10px 10px 0 0;
     gap: 20px;
 }
 
@@ -202,8 +209,14 @@ h1 {
     border-radius: 20px;
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     font-weight: 500;
+    font-size: 15px;
+}
+
+.city-flag {
+    font-size: 20px;
+    line-height: 1;
 }
 
 .city-tag .remove-btn {
@@ -233,39 +246,72 @@ h1 {
 }
 
 .city-block {
-    border: 1px solid var(--border-color);
-    border-radius: 5px;
-    padding: 10px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 15px;
     background-color: var(--bg-secondary);
+    box-shadow: 0 2px 4px var(--shadow);
 }
 
 .city-name {
     font-weight: bold;
-    font-size: 18px;
-    margin-bottom: 5px;
+    font-size: 20px;
+    margin-bottom: 8px;
     color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.city-name .city-flag {
+    font-size: 24px;
 }
 
 .current-time {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     color: var(--text-secondary);
+    font-size: 16px;
 }
 
 .hours-display {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 5px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    scroll-behavior: smooth;
+}
+
+.hours-display::-webkit-scrollbar {
+    height: 8px;
+}
+
+.hours-display::-webkit-scrollbar-track {
+    background: var(--bg-card);
+    border-radius: 4px;
+}
+
+.hours-display::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+.hours-display::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
 }
 
 .hour-block {
     text-align: center;
-    padding: 5px;
+    padding: 8px 10px;
     border: 2px solid var(--border-color);
-    border-radius: 5px;
-    min-width: 60px;
+    border-radius: 6px;
+    min-width: 70px;
+    flex-shrink: 0;
     font-size: 14px;
     background-color: var(--bg-card);
     color: var(--text-primary);
+    white-space: nowrap;
+    font-weight: 500;
 }
 
 .hour-block.work-hours {
@@ -290,13 +336,20 @@ h1 {
 }
 
 @media (max-width: 768px) {
+    .container {
+        padding: 15px;
+        border-radius: 8px;
+    }
+
     .header {
         flex-direction: row;
         justify-content: space-between;
+        margin: -15px -15px 15px -15px;
+        padding: 15px;
     }
 
     h1 {
-        font-size: 22px;
+        font-size: 20px;
     }
 
     .theme-toggle {
@@ -305,9 +358,48 @@ h1 {
         font-size: 20px;
     }
 
+    .controls {
+        margin-bottom: 15px;
+    }
+
+    .add-city-btn {
+        width: 100%;
+        padding: 12px 20px;
+    }
+
+    .selected-cities {
+        margin-bottom: 15px;
+    }
+
+    .city-tag {
+        font-size: 14px;
+        padding: 6px 12px;
+    }
+
+    .city-flag {
+        font-size: 18px;
+    }
+
+    .city-block {
+        padding: 12px;
+    }
+
+    .city-name {
+        font-size: 18px;
+    }
+
+    .city-name .city-flag {
+        font-size: 22px;
+    }
+
+    .current-time {
+        font-size: 14px;
+    }
+
     .hour-block {
-        min-width: 45px;
-        font-size: 12px;
+        min-width: 60px;
+        font-size: 13px;
+        padding: 6px 8px;
     }
 
     .selector-buttons {
@@ -316,5 +408,35 @@ h1 {
 
     .btn-primary, .btn-secondary {
         width: 100%;
+    }
+
+    .city-selector-panel {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 18px;
+    }
+
+    .theme-toggle {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+
+    .city-name {
+        font-size: 16px;
+    }
+
+    .city-name .city-flag {
+        font-size: 20px;
+    }
+
+    .hour-block {
+        min-width: 55px;
+        font-size: 12px;
+        padding: 5px 6px;
     }
 }

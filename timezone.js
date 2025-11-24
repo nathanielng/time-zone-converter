@@ -13,45 +13,45 @@ const selectedCitiesContainer = document.getElementById('selectedCities');
 const timeDisplay = document.getElementById('timeDisplay');
 const dstIndicator = document.getElementById('dstIndicator');
 
-// City timezone mappings
+// City timezone mappings with flags
 const cities = {
-    Singapore: 'Asia/Singapore',
-    Los_Angeles: 'America/Los_Angeles',
-    New_York: 'America/New_York',
-    London: 'Europe/London',
-    Paris: 'Europe/Paris',
-    Frankfurt: 'Europe/Berlin',
-    Kolkata: 'Asia/Kolkata',
-    Jakarta: 'Asia/Jakarta',
-    Tokyo: 'Asia/Tokyo',
-    Sydney: 'Australia/Sydney',
-    Dubai: 'Asia/Dubai',
-    Hong_Kong: 'Asia/Hong_Kong',
-    Mumbai: 'Asia/Kolkata',
-    Toronto: 'America/Toronto',
-    Chicago: 'America/Chicago',
-    Denver: 'America/Denver',
-    Mexico_City: 'America/Mexico_City',
-    Sao_Paulo: 'America/Sao_Paulo',
-    Buenos_Aires: 'America/Argentina/Buenos_Aires',
-    Berlin: 'Europe/Berlin',
-    Rome: 'Europe/Rome',
-    Madrid: 'Europe/Madrid',
-    Amsterdam: 'Europe/Amsterdam',
-    Stockholm: 'Europe/Stockholm',
-    Moscow: 'Europe/Moscow',
-    Istanbul: 'Europe/Istanbul',
-    Cairo: 'Africa/Cairo',
-    Johannesburg: 'Africa/Johannesburg',
-    Beijing: 'Asia/Shanghai',
-    Shanghai: 'Asia/Shanghai',
-    Seoul: 'Asia/Seoul',
-    Bangkok: 'Asia/Bangkok',
-    Kuala_Lumpur: 'Asia/Kuala_Lumpur',
-    Manila: 'Asia/Manila',
-    Auckland: 'Pacific/Auckland',
-    Perth: 'Australia/Perth',
-    Melbourne: 'Australia/Melbourne'
+    Singapore: { tz: 'Asia/Singapore', flag: '🇸🇬' },
+    Los_Angeles: { tz: 'America/Los_Angeles', flag: '🇺🇸' },
+    New_York: { tz: 'America/New_York', flag: '🇺🇸' },
+    London: { tz: 'Europe/London', flag: '🇬🇧' },
+    Paris: { tz: 'Europe/Paris', flag: '🇫🇷' },
+    Frankfurt: { tz: 'Europe/Berlin', flag: '🇩🇪' },
+    Kolkata: { tz: 'Asia/Kolkata', flag: '🇮🇳' },
+    Jakarta: { tz: 'Asia/Jakarta', flag: '🇮🇩' },
+    Tokyo: { tz: 'Asia/Tokyo', flag: '🇯🇵' },
+    Sydney: { tz: 'Australia/Sydney', flag: '🇦🇺' },
+    Dubai: { tz: 'Asia/Dubai', flag: '🇦🇪' },
+    Hong_Kong: { tz: 'Asia/Hong_Kong', flag: '🇭🇰' },
+    Mumbai: { tz: 'Asia/Kolkata', flag: '🇮🇳' },
+    Toronto: { tz: 'America/Toronto', flag: '🇨🇦' },
+    Chicago: { tz: 'America/Chicago', flag: '🇺🇸' },
+    Denver: { tz: 'America/Denver', flag: '🇺🇸' },
+    Mexico_City: { tz: 'America/Mexico_City', flag: '🇲🇽' },
+    Sao_Paulo: { tz: 'America/Sao_Paulo', flag: '🇧🇷' },
+    Buenos_Aires: { tz: 'America/Argentina/Buenos_Aires', flag: '🇦🇷' },
+    Berlin: { tz: 'Europe/Berlin', flag: '🇩🇪' },
+    Rome: { tz: 'Europe/Rome', flag: '🇮🇹' },
+    Madrid: { tz: 'Europe/Madrid', flag: '🇪🇸' },
+    Amsterdam: { tz: 'Europe/Amsterdam', flag: '🇳🇱' },
+    Stockholm: { tz: 'Europe/Stockholm', flag: '🇸🇪' },
+    Moscow: { tz: 'Europe/Moscow', flag: '🇷🇺' },
+    Istanbul: { tz: 'Europe/Istanbul', flag: '🇹🇷' },
+    Cairo: { tz: 'Africa/Cairo', flag: '🇪🇬' },
+    Johannesburg: { tz: 'Africa/Johannesburg', flag: '🇿🇦' },
+    Beijing: { tz: 'Asia/Shanghai', flag: '🇨🇳' },
+    Shanghai: { tz: 'Asia/Shanghai', flag: '🇨🇳' },
+    Seoul: { tz: 'Asia/Seoul', flag: '🇰🇷' },
+    Bangkok: { tz: 'Asia/Bangkok', flag: '🇹🇭' },
+    Kuala_Lumpur: { tz: 'Asia/Kuala_Lumpur', flag: '🇲🇾' },
+    Manila: { tz: 'Asia/Manila', flag: '🇵🇭' },
+    Auckland: { tz: 'Pacific/Auckland', flag: '🇳🇿' },
+    Perth: { tz: 'Australia/Perth', flag: '🇦🇺' },
+    Melbourne: { tz: 'Australia/Melbourne', flag: '🇦🇺' }
 };
 
 // State
@@ -99,8 +99,9 @@ function renderSelectedCities() {
         const cityTag = document.createElement('div');
         cityTag.className = 'city-tag';
 
-        const cityName = document.createElement('span');
-        cityName.textContent = city.replace(/_/g, ' ');
+        const cityInfo = document.createElement('span');
+        const flag = cities[city]?.flag || '🌍';
+        cityInfo.innerHTML = `<span class="city-flag">${flag}</span> ${city.replace(/_/g, ' ')}`;
 
         const removeBtn = document.createElement('button');
         removeBtn.className = 'remove-btn';
@@ -108,7 +109,7 @@ function renderSelectedCities() {
         removeBtn.setAttribute('aria-label', `Remove ${city}`);
         removeBtn.addEventListener('click', () => removeCity(city));
 
-        cityTag.appendChild(cityName);
+        cityTag.appendChild(cityInfo);
         cityTag.appendChild(removeBtn);
         selectedCitiesContainer.appendChild(cityTag);
     });
@@ -152,7 +153,8 @@ function updateTime() {
     const now = new Date();
 
     selectedCities.forEach(city => {
-        const timeZone = cities[city];
+        const cityData = cities[city];
+        const timeZone = cityData.tz;
         const options = {
             timeZone: timeZone,
             hour: 'numeric',
@@ -169,7 +171,8 @@ function updateTime() {
 
         const cityName = document.createElement('div');
         cityName.className = 'city-name';
-        cityName.textContent = city.replace(/_/g, ' ');
+        const flag = cityData.flag || '🌍';
+        cityName.innerHTML = `<span class="city-flag">${flag}</span> ${city.replace(/_/g, ' ')}`;
         cityBlock.appendChild(cityName);
 
         const currentTime = document.createElement('div');
