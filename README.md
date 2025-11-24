@@ -5,6 +5,10 @@ A beautiful, intuitive timezone converter that helps you coordinate across multi
 ![TimeSync](https://img.shields.io/badge/status-active-success.svg)
 ![License](https://img.shields.io/badge/license-open%20source-blue.svg)
 
+![TimeSync Interface](images/screenshot-light-h.png)
+
+*Interactive timeline showing multiple time zones with color-coded work hours, sleep hours, and meeting time suggestions. [View more screenshots](SCREENSHOTS.md)*
+
 ## Features
 
 ### Core Functionality
