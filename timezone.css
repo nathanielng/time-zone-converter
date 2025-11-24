@@ -501,7 +501,7 @@ h1 {
 }
 
 [data-layout="vertical"] .city-info-row {
-    width: 90px;
+    width: 100px;
     flex-shrink: 0;
     border-bottom: none;
     border-right: 1px solid var(--border-color);
@@ -525,7 +525,7 @@ h1 {
 
 [data-layout="vertical"] .hours-row {
     flex-direction: column;
-    width: 90px;
+    width: 100px;
     flex-shrink: 0;
     border-bottom: none;
     border-right: 1px solid var(--border-color);
