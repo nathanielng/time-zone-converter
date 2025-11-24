@@ -8,34 +8,80 @@
 </head>
 <body>
     <div class="container">
-        <h1>Time Zone Converter</h1>
-        <div class="city-selectors">
-            <select id="city1" class="city-select">
-                <option value="Singapore" selected>Singapore (UTC+8)</option>
-            </select>
-            <select id="city2" class="city-select">
-                <option value="Los_Angeles" selected>Los Angeles (UTC-7)</option>
-                <option value="New_York">New York (UTC-4)</option>
-                <option value="London">London (UTC+1)</option>
-                <option value="Paris">Paris (UTC+2)</option>
-                <option value="Frankfurt">Frankfurt (UTC+2)</option>
-                <option value="Kolkata">Kolkata (UTC+5:30)</option>
-                <option value="Jakarta">Jakarta (UTC+7)</option>
-                <option value="Tokyo">Tokyo (UTC+9)</option>
-                <option value="Sydney">Sydney (UTC+10)</option>
-            </select>
-            <select id="city3" class="city-select">
-                <option value="">Select a city</option>
-                <option value="New_York">New York (UTC-4)</option>
-                <option value="London">London (UTC+1)</option>
-                <option value="Paris">Paris (UTC+2)</option>
-                <option value="Frankfurt">Frankfurt (UTC+2)</option>
-                <option value="Kolkata">Kolkata (UTC+5:30)</option>
-                <option value="Jakarta">Jakarta (UTC+7)</option>
-                <option value="Tokyo">Tokyo (UTC+9)</option>
-                <option value="Sydney">Sydney (UTC+10)</option>
+        <div class="header">
+            <div class="header-left">
+                <h1>Time Zone Converter</h1>
+                <div id="headerTime" class="header-time"></div>
+            </div>
+            <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">
+                <span class="theme-icon">🌙</span>
+            </button>
+        </div>
+
+        <div class="controls">
+            <button id="addCityBtn" class="add-city-btn">+ Add City</button>
+            <button id="toggleMeetingFinder" class="meeting-finder-btn">🤝 Find Meeting Time</button>
+            <select id="timeSelector" class="time-selector">
+                <option value="-1">Current Time</option>
             </select>
         </div>
+
+        <div id="meetingFinderPanel" class="meeting-finder-panel hidden">
+            <h3>🤝 Best Meeting Times</h3>
+            <div id="meetingTimesDisplay" class="meeting-times-display"></div>
+        </div>
+
+        <div id="citySelector" class="city-selector-panel hidden">
+            <h3>Select a City</h3>
+            <input type="text" id="citySearch" class="city-search" placeholder="Search cities...">
+            <select id="cityDropdown" class="city-dropdown" size="8">
+                <option value="">Choose a city...</option>
+                <option value="Singapore">Singapore (UTC+8)</option>
+                <option value="Los_Angeles">Los Angeles (UTC-7)</option>
+                <option value="New_York">New York (UTC-4)</option>
+                <option value="London">London (UTC+1)</option>
+                <option value="Paris">Paris (UTC+2)</option>
+                <option value="Frankfurt">Frankfurt (UTC+2)</option>
+                <option value="Kolkata">Kolkata (UTC+5:30)</option>
+                <option value="Jakarta">Jakarta (UTC+7)</option>
+                <option value="Tokyo">Tokyo (UTC+9)</option>
+                <option value="Sydney">Sydney (UTC+10)</option>
+                <option value="Dubai">Dubai (UTC+4)</option>
+                <option value="Hong_Kong">Hong Kong (UTC+8)</option>
+                <option value="Mumbai">Mumbai (UTC+5:30)</option>
+                <option value="Toronto">Toronto (UTC-4)</option>
+                <option value="Chicago">Chicago (UTC-5)</option>
+                <option value="Denver">Denver (UTC-6)</option>
+                <option value="Mexico_City">Mexico City (UTC-5)</option>
+                <option value="Sao_Paulo">São Paulo (UTC-3)</option>
+                <option value="Buenos_Aires">Buenos Aires (UTC-3)</option>
+                <option value="Berlin">Berlin (UTC+2)</option>
+                <option value="Rome">Rome (UTC+2)</option>
+                <option value="Madrid">Madrid (UTC+2)</option>
+                <option value="Amsterdam">Amsterdam (UTC+2)</option>
+                <option value="Stockholm">Stockholm (UTC+2)</option>
+                <option value="Moscow">Moscow (UTC+3)</option>
+                <option value="Istanbul">Istanbul (UTC+3)</option>
+                <option value="Cairo">Cairo (UTC+2)</option>
+                <option value="Johannesburg">Johannesburg (UTC+2)</option>
+                <option value="Beijing">Beijing (UTC+8)</option>
+                <option value="Shanghai">Shanghai (UTC+8)</option>
+                <option value="Seoul">Seoul (UTC+9)</option>
+                <option value="Bangkok">Bangkok (UTC+7)</option>
+                <option value="Kuala_Lumpur">Kuala Lumpur (UTC+8)</option>
+                <option value="Manila">Manila (UTC+8)</option>
+                <option value="Auckland">Auckland (UTC+12)</option>
+                <option value="Perth">Perth (UTC+8)</option>
+                <option value="Melbourne">Melbourne (UTC+10)</option>
+            </select>
+            <div class="selector-buttons">
+                <button id="addSelectedCity" class="btn-primary">Add</button>
+                <button id="cancelSelector" class="btn-secondary">Cancel</button>
+            </div>
+        </div>
+
+        <div id="selectedCities" class="selected-cities"></div>
+
         <div id="timeDisplay" class="time-display"></div>
         <div id="dstIndicator" class="dst-indicator"></div>
     </div>
