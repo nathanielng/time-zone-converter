@@ -390,7 +390,7 @@ h1 {
 .hours-row {
     display: flex;
     flex-wrap: nowrap;
-    gap: 4px;
+    gap: 2px;
     padding: 10px 12px;
     border-bottom: 1px solid var(--border-color);
     min-height: 60px;
@@ -420,12 +420,12 @@ h1 {
 
 .hour-block {
     text-align: center;
-    padding: 6px 8px;
+    padding: 4px 4px;
     border: 2px solid var(--border-color);
     border-radius: 4px;
-    min-width: 55px;
+    min-width: 28px;
     flex-shrink: 0;
-    font-size: 12px;
+    font-size: 11px;
     background-color: var(--bg-card);
     color: var(--text-primary);
     white-space: nowrap;
@@ -542,9 +542,9 @@ h1 {
     }
 
     .hour-block {
-        min-width: 50px;
-        font-size: 11px;
-        padding: 5px 6px;
+        min-width: 26px;
+        font-size: 10px;
+        padding: 4px 3px;
     }
 
     .selector-buttons {
@@ -598,8 +598,8 @@ h1 {
     }
 
     .hour-block {
-        min-width: 45px;
-        font-size: 11px;
-        padding: 4px 5px;
+        min-width: 24px;
+        font-size: 10px;
+        padding: 3px 2px;
     }
 }
