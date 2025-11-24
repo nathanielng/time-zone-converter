@@ -561,9 +561,12 @@ initTimeSelector();
 initCities();
 updateHeaderTime();
 
-// Update time every minute (only if showing current time)
+// Update header time every second, full time display every minute
 setInterval(() => {
     updateHeaderTime();
+}, 1000);
+
+setInterval(() => {
     if (parseInt(timeSelector.value) === -1) {
         updateTime();
     }
