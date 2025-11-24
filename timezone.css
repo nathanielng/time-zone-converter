@@ -9,6 +9,9 @@
     --work-hours-bg: #90EE90;
     --work-hours-border: #32CD32;
     --work-hours-text: #006400;
+    --sleep-hours-bg: #1a1a1a;
+    --sleep-hours-border: #000000;
+    --sleep-hours-text: #999999;
     --current-hour-bg: #FFD700;
     --current-hour-border: #FFA500;
     --current-hour-text: #8B4513;
@@ -32,6 +35,9 @@
     --work-hours-bg: #2d5016;
     --work-hours-border: #4a7c23;
     --work-hours-text: #90EE90;
+    --sleep-hours-bg: #0a0a0a;
+    --sleep-hours-border: #1a1a1a;
+    --sleep-hours-text: #666666;
     --current-hour-bg: #665200;
     --current-hour-border: #997a00;
     --current-hour-text: #FFD700;
@@ -441,6 +447,13 @@ h1 {
     background-color: var(--work-hours-bg);
     border: 2px solid var(--work-hours-border);
     color: var(--work-hours-text);
+    font-weight: bold;
+}
+
+.hour-block.sleep-hours {
+    background-color: var(--sleep-hours-bg);
+    border: 2px solid var(--sleep-hours-border);
+    color: var(--sleep-hours-text);
     font-weight: bold;
 }
 
