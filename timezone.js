@@ -285,16 +285,52 @@ function formatHour12(hour) {
     return `${hour12}:00 ${ampm}`;
 }
 
+function getUTCOffset(date, timeZone) {
+    // Get the UTC offset for a specific timezone at a given date
+    const formatter = new Intl.DateTimeFormat('en-US', {
+        timeZone: timeZone,
+        timeZoneName: 'longOffset'
+    });
+
+    try {
+        const parts = formatter.formatToParts(date);
+        const offsetPart = parts.find(part => part.type === 'timeZoneName');
+        if (offsetPart && offsetPart.value !== 'GMT') {
+            return offsetPart.value.replace('GMT', 'UTC');
+        }
+    } catch (e) {
+        // Fallback for browsers that don't support longOffset
+    }
+
+    // Fallback: calculate offset manually
+    const utcDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }));
+    const tzDate = new Date(date.toLocaleString('en-US', { timeZone }));
+    const offset = (tzDate.getTime() - utcDate.getTime()) / (1000 * 60);
+    const hours = Math.floor(Math.abs(offset) / 60);
+    const minutes = Math.abs(offset) % 60;
+    const sign = offset >= 0 ? '+' : '-';
+
+    if (minutes === 0) {
+        return `UTC${sign}${hours}`;
+    } else {
+        return `UTC${sign}${hours}:${minutes.toString().padStart(2, '0')}`;
+    }
+}
+
 function updateHeaderTime() {
     const now = new Date();
     const formatter = new Intl.DateTimeFormat('en-US', {
         hour: 'numeric',
         minute: 'numeric',
         second: 'numeric',
-        hour12: true,
-        timeZoneName: 'short'
+        hour12: true
     });
-    headerTime.textContent = formatter.format(now);
+
+    // Get system timezone
+    const systemTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const offset = getUTCOffset(now, systemTimeZone);
+
+    headerTime.textContent = `${formatter.format(now)} ${offset}`;
 }
 
 function updateTime() {
@@ -365,16 +401,6 @@ function updateTime() {
     selectedCities.forEach(city => {
         const cityData = cities[city];
         const timeZone = cityData.tz;
-        const options = {
-            timeZone: timeZone,
-            hour: 'numeric',
-            minute: 'numeric',
-            hour12: true,
-            timeZoneName: 'short'
-        };
-
-        const formatter = new Intl.DateTimeFormat('en-US', options);
-        const formattedTime = formatter.format(referenceTime);
 
         // Create city info row (left side - fixed)
         const cityInfoRow = document.createElement('div');
@@ -387,10 +413,15 @@ function updateTime() {
 
         const currentTime = document.createElement('div');
         currentTime.className = 'current-time';
-        // Extract timezone abbreviation from formatted time (e.g., "PST" from "10:30 PM PST")
-        const timezonePart = formattedTime.split(' ').pop();
-        const timePart = formattedTime.replace(` ${timezonePart}`, '');
-        currentTime.textContent = `${timePart} ${timezonePart}`;
+        // Format time and get UTC offset
+        const timeFormatter = new Intl.DateTimeFormat('en-US', {
+            timeZone: timeZone,
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true
+        });
+        const offset = getUTCOffset(referenceTime, timeZone);
+        currentTime.textContent = `${timeFormatter.format(referenceTime)} ${offset}`;
 
         cityInfoRow.appendChild(cityName);
         cityInfoRow.appendChild(currentTime);
@@ -450,18 +481,12 @@ function updateTime() {
         const januaryDate = new Date(now.getFullYear(), 0, 1);
         const julyDate = new Date(now.getFullYear(), 6, 1);
 
-        const januaryOffset = new Intl.DateTimeFormat('en-US', {
-            timeZone: timeZone,
-            timeZoneName: 'short'
-        }).format(januaryDate).split(' ').pop();
-
-        const julyOffset = new Intl.DateTimeFormat('en-US', {
-            timeZone: timeZone,
-            timeZoneName: 'short'
-        }).format(julyDate).split(' ').pop();
+        const januaryOffset = getUTCOffset(januaryDate, timeZone);
+        const julyOffset = getUTCOffset(julyDate, timeZone);
 
         if (januaryOffset !== julyOffset) {
-            dstIndicator.innerHTML += `${city.replace(/_/g, ' ')} is currently observing ${formattedTime.split(' ').pop()}. `;
+            const currentOffset = getUTCOffset(referenceTime, timeZone);
+            dstIndicator.innerHTML += `${city.replace(/_/g, ' ')} is currently observing ${currentOffset}. `;
         }
     });
 
