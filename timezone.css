@@ -1,3 +1,53 @@
+:root {
+    --bg-primary: #f0f0f0;
+    --bg-secondary: white;
+    --bg-card: white;
+    --text-primary: #333;
+    --text-secondary: #666;
+    --border-color: #ccc;
+    --shadow: rgba(0, 0, 0, 0.1);
+    --work-hours-bg: #90EE90;
+    --work-hours-border: #32CD32;
+    --work-hours-text: #006400;
+    --current-hour-bg: #FFD700;
+    --current-hour-border: #FFA500;
+    --current-hour-text: #8B4513;
+    --btn-primary-bg: #4CAF50;
+    --btn-primary-hover: #45a049;
+    --btn-secondary-bg: #f44336;
+    --btn-secondary-hover: #da190b;
+    --city-tag-bg: #e3f2fd;
+    --city-tag-border: #2196F3;
+    --city-tag-text: #1565C0;
+}
+
+[data-theme="dark"] {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2d2d2d;
+    --bg-card: #2d2d2d;
+    --text-primary: #e0e0e0;
+    --text-secondary: #b0b0b0;
+    --border-color: #444;
+    --shadow: rgba(0, 0, 0, 0.3);
+    --work-hours-bg: #2d5016;
+    --work-hours-border: #4a7c23;
+    --work-hours-text: #90EE90;
+    --current-hour-bg: #665200;
+    --current-hour-border: #997a00;
+    --current-hour-text: #FFD700;
+    --btn-primary-bg: #4CAF50;
+    --btn-primary-hover: #66BB6A;
+    --btn-secondary-bg: #f44336;
+    --btn-secondary-hover: #ef5350;
+    --city-tag-bg: #1e3a5f;
+    --city-tag-border: #2196F3;
+    --city-tag-text: #64B5F6;
+}
+
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
 body {
     font-family: Arial, sans-serif;
     display: flex;
@@ -5,38 +55,175 @@ body {
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    background-color: #f0f0f0;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
     padding: 20px;
 }
 
 .container {
-    background-color: white;
+    background-color: var(--bg-card);
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px var(--shadow);
     max-width: 1000px;
     width: 100%;
 }
 
-h1 {
-    text-align: center;
-    color: #333;
-}
-
-.city-selectors {
+.header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
-    flex-wrap: wrap;
+    gap: 20px;
+}
+
+h1 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 28px;
+}
+
+.theme-toggle {
+    background: none;
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+    border-color: var(--btn-primary-bg);
+}
+
+.theme-toggle:active {
+    transform: scale(0.95);
+}
+
+.controls {
+    margin-bottom: 20px;
+}
+
+.add-city-btn {
+    background-color: var(--btn-primary-bg);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.add-city-btn:hover {
+    background-color: var(--btn-primary-hover);
+}
+
+.city-selector-panel {
+    background-color: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.city-selector-panel.hidden {
+    display: none;
+}
+
+.city-selector-panel h3 {
+    margin-top: 0;
+    color: var(--text-primary);
+}
+
+.city-dropdown {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    margin-bottom: 15px;
+}
+
+.selector-buttons {
+    display: flex;
     gap: 10px;
 }
 
-.city-select {
-    padding: 5px;
-    font-size: 16px;
+.btn-primary, .btn-secondary {
+    padding: 10px 20px;
+    border: none;
     border-radius: 5px;
-    border: 1px solid #ccc;
-    flex-grow: 1;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--btn-primary-bg);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--btn-primary-hover);
+}
+
+.btn-secondary {
+    background-color: var(--btn-secondary-bg);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: var(--btn-secondary-hover);
+}
+
+.selected-cities {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.city-tag {
+    background-color: var(--city-tag-bg);
+    color: var(--city-tag-text);
+    border: 2px solid var(--city-tag-border);
+    padding: 8px 15px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+}
+
+.city-tag .remove-btn {
+    background: none;
+    border: none;
+    color: var(--city-tag-text);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+}
+
+.city-tag .remove-btn:hover {
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .time-display {
@@ -46,20 +233,22 @@ h1 {
 }
 
 .city-block {
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-color);
     border-radius: 5px;
     padding: 10px;
+    background-color: var(--bg-secondary);
 }
 
 .city-name {
     font-weight: bold;
     font-size: 18px;
     margin-bottom: 5px;
+    color: var(--text-primary);
 }
 
 .current-time {
     margin-bottom: 10px;
-    color: #666;
+    color: var(--text-secondary);
 }
 
 .hours-display {
@@ -71,23 +260,25 @@ h1 {
 .hour-block {
     text-align: center;
     padding: 5px;
-    border: 2px solid #ccc;
+    border: 2px solid var(--border-color);
     border-radius: 5px;
     min-width: 60px;
     font-size: 14px;
+    background-color: var(--bg-card);
+    color: var(--text-primary);
 }
 
 .hour-block.work-hours {
-    background-color: #90EE90;  /* Light green */
-    border: 2px solid #32CD32;  /* Lime green border */
-    color: #006400;  /* Dark green text */
+    background-color: var(--work-hours-bg);
+    border: 2px solid var(--work-hours-border);
+    color: var(--work-hours-text);
     font-weight: bold;
 }
 
 .hour-block.current-hour {
-    background-color: #FFD700;  /* Gold */
-    border: 2px solid #FFA500;  /* Orange border */
-    color: #8B4513;  /* Saddle brown text */
+    background-color: var(--current-hour-bg);
+    border: 2px solid var(--current-hour-border);
+    color: var(--current-hour-text);
     font-weight: bold;
 }
 
@@ -95,16 +286,35 @@ h1 {
     text-align: center;
     margin-top: 20px;
     font-style: italic;
-    color: #666;
+    color: var(--text-secondary);
 }
 
 @media (max-width: 768px) {
-    .city-selectors {
-        flex-direction: column;
+    .header {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    .theme-toggle {
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
     }
 
     .hour-block {
         min-width: 45px;
         font-size: 12px;
+    }
+
+    .selector-buttons {
+        flex-direction: column;
+    }
+
+    .btn-primary, .btn-secondary {
+        width: 100%;
     }
 }
