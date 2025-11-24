@@ -1,0 +1,110 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+    padding: 20px;
+}
+
+.container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 1000px;
+    width: 100%;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.city-selectors {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.city-select {
+    padding: 5px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    flex-grow: 1;
+}
+
+.time-display {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.city-block {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.city-name {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.current-time {
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.hours-display {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.hour-block {
+    text-align: center;
+    padding: 5px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    min-width: 60px;
+    font-size: 14px;
+}
+
+.hour-block.work-hours {
+    background-color: #90EE90;  /* Light green */
+    border: 2px solid #32CD32;  /* Lime green border */
+    color: #006400;  /* Dark green text */
+    font-weight: bold;
+}
+
+.hour-block.current-hour {
+    background-color: #FFD700;  /* Gold */
+    border: 2px solid #FFA500;  /* Orange border */
+    color: #8B4513;  /* Saddle brown text */
+    font-weight: bold;
+}
+
+.dst-indicator {
+    text-align: center;
+    margin-top: 20px;
+    font-style: italic;
+    color: #666;
+}
+
+@media (max-width: 768px) {
+    .city-selectors {
+        flex-direction: column;
+    }
+
+    .hour-block {
+        min-width: 45px;
+        font-size: 12px;
+    }
+}
