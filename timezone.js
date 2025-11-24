@@ -68,8 +68,6 @@ const cities = {
 // State
 let selectedCities = [];
 let meetingFinderActive = false;
-let hourDisplays = [];
-let isScrollingSynced = false;
 
 // Initialize theme
 function initTheme() {
@@ -291,32 +289,9 @@ function formatHour12(hour) {
     return `${hour12}:00 ${ampm}`;
 }
 
-// Synchronized scrolling
-function setupSyncedScrolling() {
-    hourDisplays.forEach((display, index) => {
-        display.addEventListener('scroll', (e) => {
-            if (!isScrollingSynced) {
-                isScrollingSynced = true;
-                const scrollLeft = e.target.scrollLeft;
-
-                hourDisplays.forEach((otherDisplay, otherIndex) => {
-                    if (otherIndex !== index) {
-                        otherDisplay.scrollLeft = scrollLeft;
-                    }
-                });
-
-                setTimeout(() => {
-                    isScrollingSynced = false;
-                }, 50);
-            }
-        });
-    });
-}
-
 function updateTime() {
     timeDisplay.innerHTML = '';
     dstIndicator.innerHTML = '';
-    hourDisplays = [];
 
     if (selectedCities.length === 0) {
         timeDisplay.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">No cities selected. Click "+ Add City" to get started.</p>';
@@ -364,6 +339,21 @@ function updateTime() {
         }
     }
 
+    // Create the timeline container
+    const timelineContainer = document.createElement('div');
+    timelineContainer.className = 'timeline-container';
+
+    // Create city info column (fixed on left)
+    const cityInfoColumn = document.createElement('div');
+    cityInfoColumn.className = 'city-info-column';
+
+    // Create hours scroll container (scrollable on right)
+    const hoursScrollContainer = document.createElement('div');
+    hoursScrollContainer.className = 'hours-scroll-container';
+
+    const hoursGrid = document.createElement('div');
+    hoursGrid.className = 'hours-grid';
+
     selectedCities.forEach(city => {
         const cityData = cities[city];
         const timeZone = cityData.tz;
@@ -378,22 +368,26 @@ function updateTime() {
         const formatter = new Intl.DateTimeFormat('en-US', options);
         const formattedTime = formatter.format(referenceTime);
 
-        const cityBlock = document.createElement('div');
-        cityBlock.className = 'city-block';
+        // Create city info row (left side - fixed)
+        const cityInfoRow = document.createElement('div');
+        cityInfoRow.className = 'city-info-row';
 
         const cityName = document.createElement('div');
         cityName.className = 'city-name';
         const flag = cityData.flag || '🌍';
         cityName.innerHTML = `<span class="city-flag">${flag}</span> ${city.replace(/_/g, ' ')}`;
-        cityBlock.appendChild(cityName);
 
         const currentTime = document.createElement('div');
         currentTime.className = 'current-time';
-        currentTime.textContent = sliderValue === -1 ? `Current time: ${formattedTime}` : `Time at ${formatHour12(sliderValue)}: ${formattedTime}`;
-        cityBlock.appendChild(currentTime);
+        currentTime.textContent = sliderValue === -1 ? `${formattedTime}` : `At ${formatHour12(sliderValue)}: ${formattedTime}`;
 
-        const hoursDisplay = document.createElement('div');
-        hoursDisplay.className = 'hours-display';
+        cityInfoRow.appendChild(cityName);
+        cityInfoRow.appendChild(currentTime);
+        cityInfoColumn.appendChild(cityInfoRow);
+
+        // Create hours row (right side - scrollable)
+        const hoursRow = document.createElement('div');
+        hoursRow.className = 'hours-row';
 
         for (let i = 0; i < 24; i++) {
             const hourBlock = document.createElement('div');
@@ -436,12 +430,10 @@ function updateTime() {
                 hourBlock.classList.add('current-hour');
             }
 
-            hoursDisplay.appendChild(hourBlock);
+            hoursRow.appendChild(hourBlock);
         }
 
-        cityBlock.appendChild(hoursDisplay);
-        timeDisplay.appendChild(cityBlock);
-        hourDisplays.push(hoursDisplay);
+        hoursGrid.appendChild(hoursRow);
 
         // Check for DST
         const januaryDate = new Date(now.getFullYear(), 0, 1);
@@ -462,8 +454,10 @@ function updateTime() {
         }
     });
 
-    // Setup synced scrolling after all displays are created
-    setupSyncedScrolling();
+    hoursScrollContainer.appendChild(hoursGrid);
+    timelineContainer.appendChild(cityInfoColumn);
+    timelineContainer.appendChild(hoursScrollContainer);
+    timeDisplay.appendChild(timelineContainer);
 }
 
 // Event listeners
